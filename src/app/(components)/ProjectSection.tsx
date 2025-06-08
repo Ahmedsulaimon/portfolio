@@ -1,23 +1,6 @@
 import ProjectCard from './ProjectCard';
+import { allProjects } from "@/lib/project_data";
 
-const Projects = [
-  {
-    title: 'Automated Price Comparison App',
-    description:
-      'A mobile app that scrapes and forecasts grocery prices across UK supermarkets using machine learning.',
-    stack: ['Flutter', 'Python', 'Selenium', 'Docker', 'Next.js', 'PostgresDB'],
-    github: 'https://github.com/Ahmedsulaimon/price-comparison-app/tree/dev',
-    videoUrl: '/videos/demo.mp4', // placeholder
-  },
-  {
-    title: 'Freight Train Tracker',
-    description:
-      'A web app that provides real time update on freight train, this includes current location, expect arrival time at different location e.t.c',
-    stack: ['vite', 'React.js', 'Socket.io', 'Leafletjs',],
-    github: 'https://github.com/Ahmedsulaimon/train-tracker-app',
-    videoUrl: '/videos/project demo.mp4', 
-  },
-];
 
 export default function ProjectsSection() {
   return (
@@ -27,8 +10,8 @@ export default function ProjectsSection() {
           Featured Projects
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          {Projects.map((project, index) => (
-            <ProjectCard key={index} {...project} />
+          { allProjects.map((project, index) => (
+            <ProjectCard key={index} project={project} />
           ))}
         </div>
       </div>

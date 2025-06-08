@@ -19,9 +19,15 @@ interface CertificationCardProps {
         <p className="text-sm text-gray-600 mb-4">{year}</p>
         
         {imageUrl && (
-          <div className="mb-4">
-             <Image src={imageUrl} alt={title} />
-          </div>
+          <div className="relative w-full h-80 mb-4">
+          <Image
+            src={imageUrl}
+            alt={title}
+            fill
+            className="object-cover rounded-md"
+          />
+        </div>
+        
         )}
 
       </div>
