@@ -20,7 +20,7 @@ export interface Project {
       title: "Automated Price Comparison App",
       shortDescription:
        'A mobile app that scrapes and forecasts grocery prices across UK supermarkets using machine learning.',
-      thumbnailUrl: "/images/price-comparison-thumb.png",
+      thumbnailUrl: "/images/price_comparison.png",
       date: "2025-04-10",
       techStack: ["Flutter","Flask", "Python", "FastAPI", "PostgreSQL", "Selenium","Docker"],
       fullDescription: `
@@ -47,7 +47,7 @@ export interface Project {
       title: "Freight Train Tracker",
       shortDescription:
         "A web app that provides real time update on freight train, this includes current location, expect arrival time at different location e.t.c",
-      thumbnailUrl: "/images/freight-train-tracker.png",
+      thumbnailUrl: "/images/train_tracker.png",
       date: "2024-05-01",
       techStack: ['vite', 'React.js', 'Socket.io', 'Leafletjs', 'Typescript'],
       fullDescription: `

@@ -8,7 +8,7 @@ export default function HeroSection() {
           I build scalable web applications with modern technologies. Passionate about clean code, performance, and solving real-world problems with tech.
         </p>
         <a
-          href="#projects"
+          href="/projects"
           className="mt-8 inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition"
         >
           View Projects
