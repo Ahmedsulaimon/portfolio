@@ -53,7 +53,8 @@ export interface Project {
       fullDescription: `
       The Freight Train Tracker is a real-time web application that allows users to monitor the movement of freight trains across the UK. This application was developed as part of the Professional Software Development module during my second year at Sheffield Hallam University, in collaboration with 3Squared—a leading rail technology company.
       
-      As the Scrum Master of our development team, I played a pivotal role in implementing agile methodologies to keep our project organized and on track. My responsibilities included:
+      As the Scrum Master of our development team, I played a pivotal role in implementing agile methodologies to keep our project organized and on track. 
+      My responsibilities included:
       - Setting up and managing version control using Git.
       - Writing detailed project specifications and user stories to guide development.
       - Analyzing and integrating real-time data from 3Squared's external APIs.
@@ -68,9 +69,14 @@ export interface Project {
       - "Socket.io" to ensure that users receive live data without refreshing the page.
       - "Express.js" for the backend server logic.
       
-      This project was not only a technical success, but also a deeply rewarding experience. It challenged us to apply software engineering principles in a real-world scenario, working directly with a client, meeting their specifications, and iterating based on feedback.
+      This project was not only a technical success, but also a deeply rewarding experience. 
+      It challenged us to apply software engineering principles in a real-world scenario, 
+      working directly with a client, meeting their specifications, and iterating based on feedback.
       
-      I'm particularly proud of how I facilitated teamwork, ensured consistent progress, and contributed to both the technical and organizational aspects of development. The result was a fully functional application that met the client's requirements and strengthened my skills in full-stack development, team leadership, and client communication.
+      I'm particularly proud of how I facilitated teamwork, ensured consistent progress,
+      and contributed to both the technical and organizational aspects of development.
+      The result was a fully functional application that met the client's requirements and
+      strengthened my skills in full-stack development, team leadership, and client communication.
       `.trim(),
       
       videoUrl: "/videos/project demo.mp4",
