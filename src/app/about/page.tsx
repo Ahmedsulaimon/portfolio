@@ -82,7 +82,7 @@ export default function AboutPage() {
           download
          className="inline-block bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-700 transition"
         >
-          Download Resume
+          View Resume
         </Link>
       </section>
 

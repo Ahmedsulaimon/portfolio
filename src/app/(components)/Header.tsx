@@ -11,7 +11,7 @@ export default function Header() {
       <nav className="space-x-6 text-gray-700 font-medium">
         <Link href="/about">About</Link>
         <Link href="/projects">Projects</Link>
-        <Link href="/contact">Blog</Link>
+        <Link href="/blog">Blog</Link>
         <Link
           href="/cv/certificate_vitae.pdf"
           download

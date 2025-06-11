@@ -3,6 +3,7 @@ import { allProjects, Project } from "@/lib/project_data";
 import Image from "next/image";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface ProjectDetailProps {
   params: { slug: string };
@@ -44,11 +45,11 @@ export default function ProjectDetail({ params }: ProjectDetailProps) {
 
       
       {/* Description */}
-      <div className="prose prose-neutral prose-lg max-w-none mb-12 whitespace-pre-wrap">
-      <ReactMarkdown >
+      <article className="prose prose-lg prose-neutral max-w-none mb-14">
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>
          {project.fullDescription}
       </ReactMarkdown>
-      </div>
+      </article>
       
 
       {/* Demo Video */}
