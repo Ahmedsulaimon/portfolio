@@ -74,16 +74,26 @@ export default function ProjectDetail({ params }: ProjectDetailProps) {
         </div>
       )}
 
-      {/* GitHub Link */}
-      {project.github && (
-        <Link
-          href={project.github}
-          target="_blank"
-          className="inline-block mt-4 text-white bg-gray-900 hover:bg-gray-700 px-6 py-2 rounded-lg font-medium transition"
-        >
-          View Source on GitHub →
-        </Link>
-      )}
+     <div className="flex flex-wrap gap-4 mt-4">
+  {project.github && (
+    <Link
+      href={project.github}
+      target="_blank"
+      className="text-white bg-gray-900 hover:bg-gray-700 px-6 py-2 rounded-lg font-medium transition"
+    >
+      View Source on GitHub →
+    </Link>
+  )}
+  {project.blogSlug && (
+    <Link
+      href={`/blog/${project.blogSlug}`}
+      className="text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 px-6 py-2 rounded-lg font-medium transition"
+    >
+      Read Technical Blog →
+    </Link>
+  )}
+</div>
+
     </main>
   );
 }

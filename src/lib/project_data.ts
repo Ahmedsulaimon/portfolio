@@ -11,12 +11,13 @@ export interface Project {
     screenshots?: string[];  
     github: string;
     personalGoal: string
-   
+    blogSlug?: string;
   }
   
   export const allProjects: Project[] = [
     {
       slug: "automated-price-comparison-app",
+      blogSlug: "microservices-and-ml",
       title: "Automated Price Comparison App",
       shortDescription:
        'A mobile app that scrapes and forecasts grocery prices across UK supermarkets using machine learning.',
@@ -30,7 +31,7 @@ export interface Project {
   - Unit-aware normalization (pence → pounds) and pack-size comparisons.
   - Weighted moving average price forecasting with 0-1 confidence scores.
   - Natural-language recommendations (e.g. “Good time to buy (£0.20 drop, 85% confidence)”).
-  - Backend microservices (FastAPI + Flask gateway) + CI/CD (GitHub Actions).
+  - Backend microservices (FastAPI + Flask gateway) + CI/CD.
   - Responsive Flutter UI with voice search, accessibility support, and “Best Deal” cards.
   
   For a live walk-through, see the embedded demo video.
@@ -44,6 +45,7 @@ export interface Project {
    
     {
       slug: "freight-train-tracker",
+      blogSlug: "freight-train-tracker",
       title: "Freight Train Tracker",
       shortDescription:
         "A web app that provides real time update on freight train, this includes current location, expect arrival time at different location e.t.c",

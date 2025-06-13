@@ -6,7 +6,6 @@ import CertificationSection from './(components)/CertificateSection';
 export default function Home() {
   return (
     <>
-      {/* <Header /> */}
       <main>
         <HeroSection />
         <ProjectsSection />

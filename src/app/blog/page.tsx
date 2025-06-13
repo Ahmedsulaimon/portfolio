@@ -5,7 +5,7 @@ import { blogPosts } from "@/lib/blog_data";
 export default function BlogListPage() {
   return (
     <main className="max-w-4xl mx-auto px-6 py-16">
-      <h1 className="text-4xl font-bold mb-16 text-center">Blog</h1>
+      <h1 className="text-4xl font-bold mb-16 text-center">Blogs</h1>
       <div className="space-y-8">
         {blogPosts.map((post) => (
           <div key={post.slug} className="border-b pb-4">
