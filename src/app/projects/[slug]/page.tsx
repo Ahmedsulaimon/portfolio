@@ -1,16 +1,16 @@
 import { notFound } from "next/navigation";
-import { allProjects, Project } from "@/lib/project_data";
-import Image from "next/image";
+import { allProjects } from "@/lib/project_data";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-interface ProjectDetailProps {
-  params: { slug: string };
-}
 
-export async function generateMetadata({ params }: ProjectDetailProps) {
-  const project = allProjects.find((p) => p.slug === params.slug);
+
+export async function generateMetadata({ params }: {
+  params: Promise<{ slug: string }>
+}) {
+   const { slug } = await params
+  const project = allProjects.find((p) => p.slug === slug);
   if (!project) {
     return { title: "Project Not Found" };
   }
@@ -20,9 +20,13 @@ export async function generateMetadata({ params }: ProjectDetailProps) {
   };
 }
 
-export default function ProjectDetail({ params }: ProjectDetailProps) {
-  const project = allProjects.find((p) => p.slug === params.slug);
-  if (!project) notFound();
+export default async function ProjectDetail({ params }: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+  const project = allProjects.find((p) => p.slug === slug);
+
+  if (!project) return notFound();
 
   return (
     

@@ -1,18 +1,6 @@
 import CertificationCard from './CertificationCard';
+import { Certificates } from "@/lib/cert_data"
 
-const Projects = [
-  {
-    title: 'AWS Cloud Practitional ',
-    year: 2024,
-    imageUrl: '/images/aws_cert.png',
-    
-  },
-  {
-    title: 'Internship Experience UK: Technology on demand  ',
-    year: 2024,
-    imageUrl: '/images/IEUK_cert.png',
-  },
-];
 
 export default function CertificationSection() {
   return (
@@ -22,8 +10,8 @@ export default function CertificationSection() {
           Certifications
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          {Projects.map((project, index) => (
-            <CertificationCard key={index} {...project} />
+          {Certificates.map((cert, index) => (
+            <CertificationCard key={index} cert={cert} />
           ))}
         </div>
       </div>

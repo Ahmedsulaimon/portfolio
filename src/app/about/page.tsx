@@ -16,20 +16,20 @@ export default function AboutPage() {
       <section className="flex flex-col-reverse md:flex-row items-center gap-10 mb-16">
         <div className="md:w-2/3">
           <p className="text-lg mb-6">
-            I'm <strong>Ahmed Sulaimon</strong>, a final-year Software Engineering student at Sheffield Hallam University with a deep passion for building efficient, scalable, and impactful digital products.
+            I&apos;m <strong>Ahmed Sulaimon</strong>, a final-year Software Engineering student at Sheffield Hallam University with a deep passion for building efficient, scalable, and impactful digital products.
           </p>
           <p className="text-lg mb-6">
-            My projects focus on real-world problem-solving — from freight train tracking systems to cross-platform grocery price comparison apps. I’ve worked with technologies like React, Flutter, Python, Flask, FastAPI, and more.
+            My projects focus on real-world problem-solving — from freight train tracking systems to cross-platform grocery price comparison apps. I&apos;ve worked with technologies like React, Flutter, Python, Flask, FastAPI, and more.
           </p>
           <p className="text-lg">
-            I'm especially passionate about writing clean code, working in collaborative teams, and constantly challenging myself to learn new tools and techniques.
+            I&apos;m especially passionate about writing clean code, working in collaborative teams, and constantly challenging myself to learn new tools and techniques.
           </p>
         </div>
 
         <div className="md:w-1/3 w-full flex justify-center">
           <div className="relative w-48 h-48 md:w-60 md:h-60 rounded-full overflow-hidden border-4 border-gray-300 shadow-lg">
             <Image
-              src="/images/selfie.png" // Replace with your actual profile image path
+              src="/images/selfie.png" 
               alt="Ahmed Sulaimon"
               fill
               className="object-cover"
@@ -70,7 +70,7 @@ export default function AboutPage() {
       <section className="mb-16">
         <h2 className="text-2xl font-semibold mb-4">What Drives Me</h2>
         <p className="text-lg">
-          I thrive in environments where innovation meets purpose. Whether it's leading a team using agile methods, presenting to clients, or optimizing code performance, I bring a strong sense of ownership and curiosity to everything I do.
+          I thrive in environments where innovation meets purpose. Whether it&apos;s leading a team using agile methods, presenting to clients, or optimizing code performance, I bring a strong sense of ownership and curiosity to everything I do.
         </p>
       </section>
 
