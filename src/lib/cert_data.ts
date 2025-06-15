@@ -6,7 +6,7 @@ export interface Cert {
 
  export const Certificates: Cert []= [
   {
-    title: 'AWS Cloud Practitional ',
+    title: 'AWS Certified Cloud Practitioner (CLF-CO2) ',
     year: 2024,
     imageUrl: '/images/aws_cert.png',
     
