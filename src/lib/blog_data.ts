@@ -14,7 +14,7 @@ export const blogPosts: BlogPost[] = [
     date: "2025-05-07",
     author: "Ahmed Sulaimon",
     content: `
-Developing a production-grade application that combines microservices architecture with machine learning was both a technical challenge and a rewarding learning experience. This post outlines my process of designing and implementing a real-time grocery price comparison tool—covering the vision, architecture, ML integration, challenges, and key takeaways.
+Developing a production-grade application that combines microservices architecture with machine learning was both a technical challenge and a rewarding learning experience. This post outlines my process of designing and implementing a real-time grocery price comparison tool—covering the vision, system architecture, ML integration, CI/CD & DevOps, challenges, Technical Decisions & Trade-offs, What I’d Improve and key takeaways.
 
 ---
 
