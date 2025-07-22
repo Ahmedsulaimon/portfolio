@@ -14,7 +14,7 @@ export const blogPosts: BlogPost[] = [
     date: "2025-05-07",
     author: "Ahmed Sulaimon",
     content: `
-Developing a production-grade application that combines microservices architecture with machine learning was both a technical challenge and a rewarding learning experience. This post outlines my process of designing and implementing a real-time grocery price comparison tool—covering the vision, system architecture, ML integration, CI/CD & DevOps, challenges, Technical Decisions & Trade-offs, What I’d Improve and key takeaways.
+Developing a production-grade application that combines microservices architecture with machine learning was both a technical challenge and a rewarding learning experience. This post outlines my process of designing and implementing a real-time grocery price comparison tool covering the vision, system architecture, ML integration, CI/CD & DevOps, challenges, Technical Decisions & Trade-offs, What I’d Improve and key takeaways.
 
 ---
 
@@ -26,7 +26,7 @@ The goal was to build a platform that empowers users to make smarter grocery dec
 - Offering predictive insights into future price drops  
 - Recommending the best times to buy products based on statistical confidence  
 
-This tool aims to bring **dynamic pricing awareness** to everyday grocery shoppers—something typically reserved for large-scale retailers or marketplaces.
+This tool aims to bring **dynamic pricing awareness** to everyday grocery shoppers, something typically reserved for large-scale retailers or marketplaces.
 
 ---
 
@@ -67,7 +67,7 @@ To maintain smooth development and safe deployments, I implemented:
 - **Docker-based workflows** for consistent builds across environments  
 - **Basic health checks** and **logging** for every service  
 
-This allowed us to test and deploy services independently without disrupting the entire system—a major advantage of the microservices model.
+This allowed us to test and deploy services independently without disrupting the entire system; a major advantage of the microservices model.
 
 ---
 
@@ -122,7 +122,7 @@ Although microservices introduced some complexity, they were the better choice f
 
 - **Independent development** and deployment of each module  
 - **Resilience and fault isolation** across services  
-- Mimicking real-world distributed system designs—important for my long-term career path
+- Mimicking real-world distributed system designs; important for my long-term career path
 
 ---
 
@@ -172,7 +172,7 @@ This project helped reinforce key software engineering principles:
 
 ### 9. Final Reflections
 
-What began as an ambitious stack experiment turned into a robust, deployable platform. It challenged me to think like both a **systems architect** and a **data engineer**—skills that are increasingly in demand.
+What began as an ambitious stack experiment turned into a robust, deployable platform. It challenged me to think like both a **systems architect** and a **data engineer**; skills that are increasingly in demand.
 
 I now feel significantly more confident tackling roles that involve **distributed architecture**, **data pipelines**, and **machine learning integration**.
 
