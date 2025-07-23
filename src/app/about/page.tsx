@@ -19,7 +19,7 @@ export default function AboutPage() {
             I&apos;m <strong>Ahmed Sulaimon</strong>, a final-year Software Engineering student at Sheffield Hallam University with a deep passion for building efficient, scalable, and impactful digital products.
           </p>
           <p className="text-lg mb-6">
-            My projects focus on real-world problem-solving — from freight train tracking systems to cross-platform grocery price comparison apps. I&apos;ve worked with technologies like React, Flutter, Python, Flask, FastAPI, and more.
+            My projects focus on real-world problem-solving -- from freight train tracking systems to cross-platform grocery price comparison apps. I&apos;ve worked with technologies like React, Flutter, Python, Flask, FastAPI, and more.
           </p>
           <p className="text-lg">
             I&apos;m especially passionate about writing clean code, working in collaborative teams, and constantly challenging myself to learn new tools and techniques.
