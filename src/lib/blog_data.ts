@@ -67,7 +67,7 @@ To maintain smooth development and safe deployments, I implemented:
 - **Docker-based workflows** for consistent builds across environments  
 - **Basic health checks** and **logging** for every service  
 
-This allowed us to test and deploy services independently without disrupting the entire system; a major advantage of the microservices model.
+This allowed the testing of services independently without disrupting the entire system; a major advantage of the microservices model.
 
 ---
 
