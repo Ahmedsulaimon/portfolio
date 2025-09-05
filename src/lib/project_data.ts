@@ -37,7 +37,7 @@ export interface Project {
   For a live walk-through, see the embedded demo video.
   `.trim(),
       
-      github: 'https://github.com/Ahmedsulaimon/price-comparison-app/tree/dev',
+      github: 'https://github.com/Ahmedsulaimon/price-comparison-app/tree/main',
       videoUrl: '/videos/Price Prediction App.mp4', 
       personalGoal: "The main purpose of taking on this project is to learn new skills which include web scraping, intigrating machine learning algorithm in a real world application, understanding and practicing containarization & Microservices"
     },
