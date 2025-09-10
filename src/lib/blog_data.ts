@@ -55,10 +55,10 @@ To keep things modular and scalable, I used a **microservices-based design** wit
 **High-Level Flow:**  
 
        GitHub → Webhook Listener → Redis Queue → Review Engine → GitHub Comments  
-&nbsp;&nbsp;&nbsp; ↳ CLI Dashboard for developer interaction  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ↳ CLI Dashboard for developer interaction  
 
 All services were containerized with **Docker** and orchestrated via **docker-compose**, making it easy to spin up the entire system locally.
-    
+
 ---
 
 ### 3. Testing & CI/CD
