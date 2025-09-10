@@ -54,8 +54,8 @@ To keep things modular and scalable, I used a **microservices-based design** wit
 
 **High-Level Flow:**  
 
-GitHub → Webhook Listener → Redis Queue → Review Engine → GitHub Comments  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ↳ CLI Dashboard for developer interaction  
+       GitHub → Webhook Listener → Redis Queue → Review Engine → GitHub Comments  
+&nbsp; ↳ CLI Dashboard for developer interaction  
 
 All services were containerized with **Docker** and orchestrated via **docker-compose**, making it easy to spin up the entire system locally.
 
@@ -130,7 +130,7 @@ This project reinforced several engineering principles:
 
 ### 8. Final Reflections
 
-What started as a curiosity—“can I automate PR reviews with AI?”—grew into a full-fledged distributed system. It combined backend APIs, async job queues, AI prompt engineering, and developer tooling into one coherent application.
+What started as a curiosity--“can I automate PR reviews with AI?”--grew into a full-fledged distributed system. It combined backend APIs, async job queues, AI prompt engineering, and developer tooling into one coherent application.
 
 I walked away with stronger skills in **Python microservices, API integration, containerization, and automated testing**, along with a much deeper appreciation for how developer experience tools are built.
 
