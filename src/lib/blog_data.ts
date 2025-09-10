@@ -9,6 +9,135 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "auto-pr-review-assistant",
+    title: "Automating Code Reviews with AI and Distributed Systems",
+    date: "2025-09-10", 
+    author: "Ahmed Sulaimon",
+    content:`
+
+Building an AI-powered system to automate GitHub pull request reviews gave me a deep dive into distributed systems, API integration, and testing at scale. This post outlines how I designed and implemented the **Auto PR Review Assistant**, covering the vision, architecture, testing, challenges, and key learnings.
+
+---
+
+### 1. The Vision
+
+The goal was simple: reduce the friction in code reviews by having an assistant that can:
+
+- **Automatically analyze pull requests** when opened or updated  
+- **Generate AI-powered feedback** on style, complexity, and maintainability  
+- **Post inline comments** directly on GitHub PRs, just like a human reviewer  
+- Provide a **developer-facing CLI dashboard** to inspect review status and trigger rechecks  
+
+The idea was not to replace human reviewers, but to provide a first pass that saves engineering teams valuable time.
+
+---
+
+### 2. System Architecture
+
+To keep things modular and scalable, I used a **microservices-based design** with Redis as the central job queue:
+
+- **Webhook Listener (FastAPI)**  
+  - Receives GitHub webhook events  
+  - Validates signatures (x-hub-signature-256)  
+  - Queues jobs into Redis  
+
+- **Review Engine (Python worker)**  
+  - Dequeues jobs from Redis  
+  - Uses GitHub GraphQL + REST APIs to fetch PR metadata and diffs  
+  - Passes changes to the OpenAI API for analysis  
+  - Posts structured inline comments back to GitHub  
+
+- **CLI Dashboard (Python CLI)**  
+  - **list-prs** to view recent PRs  
+  - **show-pr <id>** to inspect AI-generated comments  
+  - **recheck-pr <id>** to trigger a re-review  
+
+**High-Level Flow:**  
+
+GitHub → Webhook Listener → Redis Queue → Review Engine → GitHub Comments  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ↳ CLI Dashboard for developer interaction  
+
+All services were containerized with **Docker** and orchestrated via **docker-compose**, making it easy to spin up the entire system locally.
+
+---
+
+### 3. Testing & CI/CD
+
+Quality was a major focus for this project:
+
+- **Unit Testing with Pytest**  
+  - Webhook Listener tested with mocked signatures and fake Redis  
+  - Review Engine tested with mocked GitHub API + OpenAI outputs  
+- **Automation via GitHub Actions**  
+  - Every push/PR triggered linting and pytest runs  
+  - Secrets (GitHub tokens, OpenAI API key) injected for integration-like tests  
+
+This ensured confidence in core logic while keeping external dependencies mocked during CI.
+
+---
+
+### 4. Challenges Faced
+
+- **Data shape variability** – OpenAI responses weren’t always in the expected JSON structure. I had to implement a flexible parser and error handling.  
+- **Commit-specific commenting** – GitHub PR comments require a valid commit SHA, file path, and line number. Handling edge cases (renamed/deleted lines) was tricky.  
+- **Async Redis clients** – Different Redis client libraries had quirks with Python 3.12, leading me to settle on the maintained **redis-py** package.  
+- **Action replays** – Re-queuing PRs for recheck required storing repo metadata alongside PR IDs.  
+
+Each roadblock sharpened my debugging skills and forced me to think about failure handling in distributed workflows.
+
+---
+
+### 5. Technical Decisions & Trade-offs
+
+#### Why Redis for Queues?
+
+I chose Redis because:  
+- Simple and fast for queue operations (**LPUSH**, **BRPOP**)  
+- Already battle-tested in distributed systems  
+- Easy to containerize and reset during dev/testing  
+
+#### Why Split into Services Instead of One App?
+
+- Clear **separation of concerns** (event handling vs. AI review logic)  
+- Easier debugging and scaling (engine workers can be scaled independently)  
+- More realistic for production, mimicking CI/CD pipeline architectures  
+
+#### Why AI Reviews Instead of Rule-Based Linters?
+
+While linters catch syntax issues, AI can provide **contextual suggestions** (readability, refactoring hints, complexity). The trade-off was unpredictability of responses, which I mitigated with structured prompting and JSON enforcement.
+
+---
+
+### 6. What I’d Improve
+
+- **Web UI Dashboard** – A lightweight frontend (React/Next.js) could make browsing PR reviews more intuitive than the CLI.  
+- **Configurable Checks** – Letting repo owners enable/disable checks (style, complexity, security) via YAML configs.  
+- **Better Diff Parsing** – Handling multi-line hunks and complex patches more gracefully.  
+- **Caching** – Avoid re-fetching unchanged diffs when re-checking PRs.  
+
+---
+
+### 7. Lessons Learned
+
+This project reinforced several engineering principles:
+
+- The importance of **structured error handling** when working with AI outputs  
+- How to integrate multiple APIs (GitHub GraphQL, REST, OpenAI) into one workflow  
+- The value of **unit + integration tests** for distributed systems  
+- How to design a project that feels like a **real-world developer tool** rather than a toy script  
+
+---
+
+### 8. Final Reflections
+
+What started as a curiosity—“can I automate PR reviews with AI?”—grew into a full-fledged distributed system. It combined backend APIs, async job queues, AI prompt engineering, and developer tooling into one coherent application.
+
+I walked away with stronger skills in **Python microservices, API integration, containerization, and automated testing**, along with a much deeper appreciation for how developer experience tools are built.
+
+---
+    `.trim(),
+  },
+  {
     slug: "microservices-and-ml",
     title: "Building an application with Microservices and Machine Learning",
     date: "2025-05-07",

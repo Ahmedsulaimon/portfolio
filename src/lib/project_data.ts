@@ -77,7 +77,7 @@ I'm particularly proud of how I facilitated teamwork, ensured consistent progres
 
       videoUrl: "/videos/project demo.mp4",
       github: "https://github.com/Ahmedsulaimon/train-tracker-app",
-      personalGoal: "My personal goal for this project was to play a key role in delivering a high-quality, real-world application while expanding my knowledge of new technologies like Leaflet.js, Socket.io, and Vite. I also aimed to strengthen my soft skills—particularly in presenting technical concepts clearly to clients, leading team collaboration as a Scrum Master, and maintaining project momentum through agile practices.",
+      personalGoal: "My personal goal for this project was to play a key role in delivering a high-quality, real-world application while expanding my knowledge of new technologies like Leaflet.js, Socket.io, and Vite. I also aimed to strengthen my soft skills,particularly in presenting technical concepts clearly to clients, leading team collaboration as a Scrum Master, and maintaining project momentum through agile practices.",
 
     },
    {
