@@ -15,6 +15,36 @@ export interface Project {
   }
   
   export const allProjects: Project[] = [
+     {
+  slug: "auto-pr-review-assistant",
+  blogSlug: "auto-pr-review-assistant",
+  title: "Auto PR Review Assistant -- MVP",
+  shortDescription:
+    "A distributed system that automates GitHub pull request reviews using AI, posting inline comments on code changes and providing a CLI dashboard for developers.",
+  thumbnailUrl: "/images/auto_pr_review.png",
+  date: "2025-09-10",
+  techStack: ['Python', 'FastAPI', 'Redis', 'Docker', 'GitHub API', 'OpenAI API', 'Pytest', 'GitHub Actions'],
+  fullDescription: `
+The Auto PR Review Assistant is a microservice-based system designed to automate the code review process for GitHub pull requests. It integrates with GitHub webhooks, uses AI for intelligent feedback on code changes, and posts detailed inline comments directly onto pull requests.
+
+The system consists of three main components:
+- **Webhook Listener Service**: A FastAPI service that validates GitHub webhook signatures, extracts pull request events, and enqueues jobs into Redis.
+- **Review Engine Service**: A worker service that dequeues jobs, fetches pull request metadata and diffs via GitHub’s GraphQL and REST APIs, generates AI-powered review feedback, and posts structured comments back to GitHub.
+- **CLI Dashboard**: A developer-facing CLI tool to list recent analyzed PRs, view AI-generated comments, and trigger rechecks.
+
+Testing and reliability were a key focus:
+- **Unit testing with Pytest**: Both the webhook listener and review engine were tested in isolation, with mocked Redis, GitHub APIs, and OpenAI integrations.
+- **Continuous Integration**: GitHub Actions was configured to automatically run the test suite on every push and pull request, ensuring regressions are caught early.
+
+To bring everything together, the system was containerized with Docker and orchestrated via docker-compose for local development, enabling smooth integration between Redis, services, and the CLI.
+
+This project strengthened my skills in distributed systems, API integrations, automated testing, and CI/CD pipelines. It also deepened my understanding of practical AI applications in developer tooling, giving me hands-on experience with building reliable, production-ready review automation.
+`.trim(),
+
+  videoUrl: "/videos/auto_pr_review_demo.mp4",
+  github: "https://github.com/Ahmedsulaimon/Auto-PR-Review-Assistant",
+  personalGoal: "My personal goal for this project was to explore how AI can be embedded into developer workflows, while practicing distributed system design, API integration, and test-driven development. I also aimed to solidify my DevOps skills by using Docker for containerization and GitHub Actions for continuous integration.",
+},
     {
       slug: "automated-price-comparison-app",
       blogSlug: "microservices-and-ml",
@@ -80,36 +110,7 @@ I'm particularly proud of how I facilitated teamwork, ensured consistent progres
       personalGoal: "My personal goal for this project was to play a key role in delivering a high-quality, real-world application while expanding my knowledge of new technologies like Leaflet.js, Socket.io, and Vite. I also aimed to strengthen my soft skills,particularly in presenting technical concepts clearly to clients, leading team collaboration as a Scrum Master, and maintaining project momentum through agile practices.",
 
     },
-   {
-  slug: "auto-pr-review-assistant",
-  blogSlug: "auto-pr-review-assistant",
-  title: "Auto PR Review Assistant -- MVP",
-  shortDescription:
-    "A distributed system that automates GitHub pull request reviews using AI, posting inline comments on code changes and providing a CLI dashboard for developers.",
-  thumbnailUrl: "/images/auto_pr_review.png",
-  date: "2025-09-10",
-  techStack: ['Python', 'FastAPI', 'Redis', 'Docker', 'GitHub API', 'OpenAI API', 'Pytest', 'GitHub Actions'],
-  fullDescription: `
-The Auto PR Review Assistant is a microservice-based system designed to automate the code review process for GitHub pull requests. It integrates with GitHub webhooks, uses AI for intelligent feedback on code changes, and posts detailed inline comments directly onto pull requests.
-
-The system consists of three main components:
-- **Webhook Listener Service**: A FastAPI service that validates GitHub webhook signatures, extracts pull request events, and enqueues jobs into Redis.
-- **Review Engine Service**: A worker service that dequeues jobs, fetches pull request metadata and diffs via GitHub’s GraphQL and REST APIs, generates AI-powered review feedback, and posts structured comments back to GitHub.
-- **CLI Dashboard**: A developer-facing CLI tool to list recent analyzed PRs, view AI-generated comments, and trigger rechecks.
-
-Testing and reliability were a key focus:
-- **Unit testing with Pytest**: Both the webhook listener and review engine were tested in isolation, with mocked Redis, GitHub APIs, and OpenAI integrations.
-- **Continuous Integration**: GitHub Actions was configured to automatically run the test suite on every push and pull request, ensuring regressions are caught early.
-
-To bring everything together, the system was containerized with Docker and orchestrated via docker-compose for local development, enabling smooth integration between Redis, services, and the CLI.
-
-This project strengthened my skills in distributed systems, API integrations, automated testing, and CI/CD pipelines. It also deepened my understanding of practical AI applications in developer tooling, giving me hands-on experience with building reliable, production-ready review automation.
-`.trim(),
-
-  videoUrl: "/videos/auto_pr_review_demo.mp4",
-  github: "https://github.com/Ahmedsulaimon/Auto-PR-Review-Assistant",
-  personalGoal: "My personal goal for this project was to explore how AI can be embedded into developer workflows, while practicing distributed system design, API integration, and test-driven development. I also aimed to solidify my DevOps skills by using Docker for containerization and GitHub Actions for continuous integration.",
-},
+  
 
   ];
   
