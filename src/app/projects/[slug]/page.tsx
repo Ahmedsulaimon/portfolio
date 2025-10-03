@@ -56,6 +56,7 @@ export default async function ProjectDetail({ params }: {
       </article>
       
 
+
       {/* Demo Video */}
       {project.videoUrl && (
         <div className="mb-12">
@@ -69,7 +70,7 @@ export default async function ProjectDetail({ params }: {
           </video>
         </div>
       )}
-
+     
       {/* Personal Goal */}
       {project.personalGoal && (
         <div className="mb-12 bg-gray-50 p-6 rounded-lg border">

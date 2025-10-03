@@ -15,13 +15,11 @@ export const blogPosts: BlogPost[] = [
     author: "Ahmed Sulaimon",
     content:`
 
-# Auto PR Review Assistant — design, deployment, and lessons (first-person)
-
 I built the **Auto PR Review Assistant** to automate the first-pass review of GitHub pull requests. The project grew from a single-process prototype into a multi-tenant microservice stack with deployment, packaging, and production-hardening workstreams. Below I describe the core problem I hit, the design I implemented, operational choices, and what I learned.
 
 ---
 
-## TL;DR
+## Summary
 
 - I moved from a single shared Redis queue to namespaced keys by **installation_id** (**pr-review-queue:<id>**, **pr-review-history:<id>**) to eliminate data leakage and make per-tenant retention/pruning simple.  
 - I implemented a small **“wake”** keep-alive pattern to help keep worker instances alive on hosts that aggressively spin down idle services.  
@@ -62,7 +60,7 @@ The fix was straightforward: namespace Redis keys by GitHub App **installation_i
 
 **Benefits**
 
-- Strong tenant isolation — no mixed history.  
+- Strong tenant isolation -- no mixed history.  
 - Easier pruning and per-installation retention.  
 - Clearer logs and easier troubleshooting (keys map directly to an installation).
 
@@ -76,7 +74,7 @@ To run a worker on free tiers (that don’t offer persistent background workers)
 - Launch the worker loop as an async background task on FastAPI startup.  
 - Add a small **wake**/keep-alive endpoint. The webhook listener calls or pings this endpoint after enqueueing a job so the service receives traffic and stays alive long enough to process jobs.
 
-This is a cost-conscious trade-off — it works well enough for demos and low usage, but for production I recommend a host that supports long-running workers or a paid worker plan.
+This is a cost-conscious trade-off -- it works well enough for demos and low usage, but for production I recommend a host that supports long-running workers or a paid worker plan.
 
 ---
 
@@ -84,11 +82,11 @@ This is a cost-conscious trade-off — it works well enough for demos and low us
 
 GitHub App auth required care:
 
-- The App private key must be PEM-formatted. When stored in env vars I convert **\n** sequences back into real newlines before using PyJWT.  
+- The App private key must be PEM-formatted. When stored in env vars I convert '\n' sequences back into real newlines before using PyJWT.  
 - I generate a short-lived JWT (≤10m) for the App, then exchange it for an **installation access token** per installation.  
 - Installation tokens expire, so I refresh tokens and retry on 401 responses.
 
-Add logging and retries around token creation and API calls — that made the workflow much more robust.
+Add logging and retries around token creation and API calls -- that made the workflow much more robust.
 
 ---
 
@@ -144,10 +142,13 @@ I store **API_URL** and **installation_id** in **~/.pr-review/config.json** for 
 
 ## Closing thoughts
 
-Small design choices can have big outcomes. Namespacing Redis keys by **installation_id** fixed security and scaling issues early. Operational realities (free-host spin-down) forced pragmatic trade-offs — the wake endpoint is one such pattern that kept things usable at low cost. Finally, integrating APIs and LLMs taught me the value of strict output contracts, defensive parsing, and strong observability.
+Small design choices can have big outcomes. Namespacing Redis keys by **installation_id** fixed security and scaling issues early. Operational realities (free-host spin-down) forced pragmatic trade-offs -- the wake endpoint is one such pattern that kept things usable at low cost. Finally, integrating APIs and LLMs taught me the value of strict output contracts, defensive parsing, and strong observability.
 
 If you want to try the GitHub App, install it here:  
 https://github.com/apps/auto-pr-review-assistant/installations/new
+
+CLI tool Installation and usage Guide:
+https://github.com/Ahmedsulaimon/Auto-PR-Review-Assistant/blob/main/cli/README.md
 
     `.trim(),
   },
