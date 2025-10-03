@@ -11,130 +11,144 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "auto-pr-review-assistant",
     title: "Automating Code Reviews with AI and Distributed Systems",
-    date: "2025-09-10", 
+    date: "2025-10-03", 
     author: "Ahmed Sulaimon",
     content:`
 
-Building an AI-powered system to automate GitHub pull request reviews gave me a deep dive into distributed systems, API integration, and testing at scale. This post outlines how I designed and implemented the **Auto PR Review Assistant**, covering the vision, architecture, testing, challenges, and key learnings.
+# Auto PR Review Assistant — design, deployment, and lessons (first-person)
+
+I built the **Auto PR Review Assistant** to automate the first-pass review of GitHub pull requests. The project grew from a single-process prototype into a multi-tenant microservice stack with deployment, packaging, and production-hardening workstreams. Below I describe the core problem I hit, the design I implemented, operational choices, and what I learned.
 
 ---
 
-### 1. The Vision
+## TL;DR
 
-The goal was simple: reduce the friction in code reviews by having an assistant that can:
-
-- **Automatically analyze pull requests** when opened or updated  
-- **Generate AI-powered feedback** on style, complexity, and maintainability  
-- **Post inline comments** directly on GitHub PRs, just like a human reviewer  
-- Provide a **developer-facing CLI dashboard** to inspect review status and trigger rechecks  
-
-The idea was not to replace human reviewers, but to provide a first pass that saves engineering teams valuable time.
+- I moved from a single shared Redis queue to namespaced keys by **installation_id** (**pr-review-queue:<id>**, **pr-review-history:<id>**) to eliminate data leakage and make per-tenant retention/pruning simple.  
+- I implemented a small **“wake”** keep-alive pattern to help keep worker instances alive on hosts that aggressively spin down idle services.  
+- The system is split into a FastAPI webhook listener, a review worker, and a CLI. The CLI is packaged for PyPI and publishing is automated via GitHub Actions + OIDC.
 
 ---
 
-### 2. System Architecture
+## The problem I started with
 
-To keep things modular and scalable, I used a **microservices-based design** with Redis as the central job queue:
+At first I used global Redis keys:
 
-- **Webhook Listener (FastAPI)**  
-  - Receives GitHub webhook events  
-  - Validates signatures (x-hub-signature-256)  
-  - Queues jobs into Redis  
+- **pr-review-queue**  
+- **pr-review-history**
 
-- **Review Engine (Python worker)**  
-  - Dequeues jobs from Redis  
-  - Uses GitHub GraphQL + REST APIs to fetch PR metadata and diffs  
-  - Passes changes to the OpenAI API for analysis  
-  - Posts structured inline comments back to GitHub  
+That worked locally but failed as the app gained multiple installations:
 
-- **CLI Dashboard (Python CLI)**  
-  - **list-prs** to view recent PRs  
-  - **show-pr <id>** to inspect AI-generated comments  
-  - **recheck-pr <id>** to trigger a re-review  
+1. **Cross-tenant data leakage** — jobs and histories from different GitHub App installations mixed together, exposing other users’ reviews.  
+2. **Operational scale & hygiene** — a single global list made pruning, debugging, and per-tenant policies hard.
 
-**High-Level Flow:**  
-
-       GitHub → Webhook Listener → Redis Queue → Review Engine → GitHub Comments  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ↳ CLI Dashboard for developer interaction  
-
-All services were containerized with **Docker** and orchestrated via **docker-compose**, making it easy to spin up the entire system locally.
+Also, hosting a continuously running worker on free managed platforms proved unreliable: instances would spin down when idle and new jobs would sit unprocessed.
 
 ---
 
-### 3. Testing & CI/CD
+## My solution: namespaced Redis + microservices
 
-Quality was a major focus for this project:
+The fix was straightforward: namespace Redis keys by GitHub App **installation_id**.
 
-- **Unit Testing with Pytest**  
-  - Webhook Listener tested with mocked signatures and fake Redis  
-  - Review Engine tested with mocked GitHub API + OpenAI outputs  
-- **Automation via GitHub Actions**  
-  - Every push/PR triggered linting and pytest runs  
-  - Secrets (GitHub tokens, OpenAI API key) injected for integration-like tests  
+**Key patterns**
 
-This ensured confidence in core logic while keeping external dependencies mocked during CI.
+- Queue: **pr-review-queue:<installation_id>**  
+- History: **pr-review-history:<installation_id>**
 
----
+**Request flow**
 
-### 4. Challenges Faced
+1. GitHub → FastAPI webhook listener (validates signature).  
+2. Listener extracts **installation.id** and **LPUSH**es a job into **pr-review-queue:<installation_id>**.  
+3. Review worker BRPOP(s) the installation-specific queue, fetches PR metadata/diffs, calls the LLM, posts comments, and appends history to **pr-review-history:<installation_id>**.
 
-- **Data shape variability** – OpenAI responses weren’t always in the expected JSON structure. I had to implement a flexible parser and error handling.  
-- **Commit-specific commenting** – GitHub PR comments require a valid commit SHA, file path, and line number. Handling edge cases (renamed/deleted lines) was tricky.  
-- **Async Redis clients** – Different Redis client libraries had quirks with Python 3.12, leading me to settle on the maintained **redis-py** package.  
-- **Action replays** – Re-queuing PRs for recheck required storing repo metadata alongside PR IDs.  
+**Benefits**
 
-Each roadblock sharpened my debugging skills and forced me to think about failure handling in distributed workflows.
+- Strong tenant isolation — no mixed history.  
+- Easier pruning and per-installation retention.  
+- Clearer logs and easier troubleshooting (keys map directly to an installation).
 
 ---
 
-### 5. Technical Decisions & Trade-offs
+## Hosting & the worker keep-alive pattern
 
-#### Why Redis for Queues?
+To run a worker on free tiers (that don’t offer persistent background workers) I used a pragmatic approach:
 
-I chose Redis because:  
-- Simple and fast for queue operations (**LPUSH**, **BRPOP**)  
-- Already battle-tested in distributed systems  
-- Easy to containerize and reset during dev/testing  
+- Deploy the review engine as a FastAPI web service (binds a port so it’s allowed by hosts).  
+- Launch the worker loop as an async background task on FastAPI startup.  
+- Add a small **wake**/keep-alive endpoint. The webhook listener calls or pings this endpoint after enqueueing a job so the service receives traffic and stays alive long enough to process jobs.
 
-#### Why Split into Services Instead of One App?
-
-- Clear **separation of concerns** (event handling vs. AI review logic)  
-- Easier debugging and scaling (engine workers can be scaled independently)  
-- More realistic for production, mimicking CI/CD pipeline architectures  
-
-#### Why AI Reviews Instead of Rule-Based Linters?
-
-While linters catch syntax issues, AI can provide **contextual suggestions** (readability, refactoring hints, complexity). The trade-off was unpredictability of responses, which I mitigated with structured prompting and JSON enforcement.
+This is a cost-conscious trade-off — it works well enough for demos and low usage, but for production I recommend a host that supports long-running workers or a paid worker plan.
 
 ---
 
-### 6. What I’d Improve
+## GitHub App auth: JWTs and installation tokens
 
-- **Web UI Dashboard** – A lightweight frontend (React/Next.js) could make browsing PR reviews more intuitive than the CLI.  
-- **Configurable Checks** – Letting repo owners enable/disable checks (style, complexity, security) via YAML configs.  
-- **Better Diff Parsing** – Handling multi-line hunks and complex patches more gracefully.  
-- **Caching** – Avoid re-fetching unchanged diffs when re-checking PRs.  
+GitHub App auth required care:
 
----
+- The App private key must be PEM-formatted. When stored in env vars I convert **\n** sequences back into real newlines before using PyJWT.  
+- I generate a short-lived JWT (≤10m) for the App, then exchange it for an **installation access token** per installation.  
+- Installation tokens expire, so I refresh tokens and retry on 401 responses.
 
-### 7. Lessons Learned
-
-This project reinforced several engineering principles:
-
-- The importance of **structured error handling** when working with AI outputs  
-- How to integrate multiple APIs (GitHub GraphQL, REST, OpenAI) into one workflow  
-- The value of **unit + integration tests** for distributed systems  
-- How to design a project that feels like a **real-world developer tool** rather than a toy script  
+Add logging and retries around token creation and API calls — that made the workflow much more robust.
 
 ---
 
-### 8. Final Reflections
+## LLM integration: prompting and parsing
 
-What started as a curiosity--“can I automate PR reviews with AI?”--grew into a full-fledged distributed system. It combined backend APIs, async job queues, AI prompt engineering, and developer tooling into one coherent application.
+AI is the interesting part, but it’s also noisy. My approach:
 
-I walked away with stronger skills in **Python microservices, API integration, containerization, and automated testing**, along with a much deeper appreciation for how developer experience tools are built.
+- Prompt the model to return **JSON-only** in a concrete schema (file, line, comment).  
+- Use a resilient parser that accepts a few JSON shapes and safely no-ops on malformed output.  
+- Split large PR diffs into smaller chunks and rate-limit requests to control quota usage.
+
+This makes downstream processing predictable and reduces failure modes from unexpected model output.
 
 ---
+
+## CLI & packaging
+
+The CLI offers these commands:
+
+- **pr-review list-prs** — list recent analyzed PRs (per installation).  
+- **pr-review show-pr <id>** — show details and AI comments.  
+- **pr-review recheck-pr <id>** — requeue a PR for re-review.
+
+I store **API_URL** and **installation_id** in **~/.pr-review/config.json** for a frictionless UX. The CLI is packaged and the release workflow uses GitHub Actions + OIDC to publish to PyPI securely (no long-lived PyPI tokens in the repo).
+
+---
+
+## Testing, CI/CD & observability
+
+- **Unit tests** (pytest) with mocks for Redis, GitHub, and the LLM keep tests fast and deterministic.  
+- **CI** uses GitHub Actions to run tests and packaging steps.  
+- **Observability**: services expose **/health** and emit structured logs; adding metrics or Sentry would be a straightforward next step.
+
+---
+
+## Small but important engineering bits
+
+- Fixed PEM encoding issues for private keys stored in envs.  
+- Recheck logic reuses the **installation_id** from history so users don’t need to supply it again.  
+- Interactive CLI setup lets users save **installation_id** to the config file during first run.  
+- Namespacing is a light-weight multi-tenant model that can be upgraded to stronger isolation (separate Redis DBs or instances) if needed.
+
+---
+
+## What I’d improve next
+
+- Protect the query API with authentication so only installation owners can access their history.  
+- Add a compact web dashboard for browsing reviews (better UX than CLI alone).  
+- Explore Redis Streams or consumer groups for robust horizontal scaling.  
+- Harden posting-idempotency and backoff to avoid duplicate comments.
+
+---
+
+## Closing thoughts
+
+Small design choices can have big outcomes. Namespacing Redis keys by **installation_id** fixed security and scaling issues early. Operational realities (free-host spin-down) forced pragmatic trade-offs — the wake endpoint is one such pattern that kept things usable at low cost. Finally, integrating APIs and LLMs taught me the value of strict output contracts, defensive parsing, and strong observability.
+
+If you want to try the GitHub App, install it here:  
+https://github.com/apps/auto-pr-review-assistant/installations/new
+
     `.trim(),
   },
   {

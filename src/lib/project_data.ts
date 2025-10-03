@@ -25,23 +25,63 @@ export interface Project {
   date: "2025-09-10",
   techStack: ['Python', 'FastAPI', 'Redis', 'Docker', 'GitHub API', 'OpenAI API', 'Pytest', 'GitHub Actions'],
   fullDescription: `
-The Auto PR Review Assistant is a microservice-based system designed to automate the code review process for GitHub pull requests. It integrates with GitHub webhooks, uses AI for intelligent feedback on code changes, and posts detailed inline comments directly onto pull requests.
+The **Auto PR Review Assistant** is a microservice, multi-tenant system that automates code review for GitHub pull requests. It combines GitHub webhooks, namespaced Redis queues, and an AI review engine to produce inline, contextual feedback and persist review history **per GitHub App installation**.
 
-The system consists of three main components:
-- **Webhook Listener Service**: A FastAPI service that validates GitHub webhook signatures, extracts pull request events, and enqueues jobs into Redis.
-- **Review Engine Service**: A worker service that dequeues jobs, fetches pull request metadata and diffs via GitHub’s GraphQL and REST APIs, generates AI-powered review feedback, and posts structured comments back to GitHub.
-- **CLI Dashboard**: A developer-facing CLI tool to list recent analyzed PRs, view AI-generated comments, and trigger rechecks.
+## Core components
 
-Testing and reliability were a key focus:
-- **Unit testing with Pytest**: Both the webhook listener and review engine were tested in isolation, with mocked Redis, GitHub APIs, and OpenAI integrations.
-- **Continuous Integration**: GitHub Actions was configured to automatically run the test suite on every push and pull request, ensuring regressions are caught early.
+- **Webhook Listener (FastAPI)**  
+  - Validates GitHub webhook signatures (x-hub-signature-256).  
+  - Extracts event data and the **installation_id**.  
+  - Enqueues jobs into Redis using installation namespacing (e.g. **pr-review-queue:<installation_id>**).
 
-To bring everything together, the system was containerized with Docker and orchestrated via docker-compose for local development, enabling smooth integration between Redis, services, and the CLI.
+- **Review Engine (worker service)**  
+  - Dequeues jobs scoped to a specific installation.  
+  - Fetches PR metadata and diffs via GitHub GraphQL + REST APIs.  
+  - Sends diffs to an LLM for review, parses structured JSON responses, and posts inline comments back to the PR.  
+  - Persists review results under **pr-review-history:<installation_id>** to support listing, inspection, and rechecks.
 
-This project strengthened my skills in distributed systems, API integrations, automated testing, and CI/CD pipelines. It also deepened my understanding of practical AI applications in developer tooling, giving me hands-on experience with building reliable, production-ready review automation.
+- **CLI Dashboard**  
+  - Developer-facing tool to **list-prs**, **show-pr <id>**, and **recheck-pr <id>**.  
+  - Stores **API_URL** and the user’s **installation_id** in a local config file (e.g. **~/.pr-review/config.json**) for a smooth UX.
+
+## CI/CD & Packaging
+
+- Unit tests with **Pytest** cover webhook validation, queueing logic, worker flows, and LLM parsing (with mocks).  
+- Services are containerized (Docker) and runnable locally with docker-compose.  
+- CLI is packaged for PyPI and automated publishing via **GitHub Actions** using OIDC (no long-lived PyPI tokens required).
+
+## Key design decisions
+
+- **Tenant isolation (namespaced Redis keys)**  
+  Each GitHub App installation gets its own Redis keys (**pr-review-queue:<installation_id>**, **pr-review-history:<installation_id>**). This prevents cross-tenant data leakage and enables per-installation pruning and scaling.
+
+- **Microservice separation**  
+  Splitting webhook handling and review processing improves fault isolation, allows independent scaling of workers, and simplifies testing and deployment.
+
+- **Robust LLM handling**  
+  Use structured prompting (force JSON output), tolerant parsing, and defensive error handling to cope with inconsistent LLM responses.
+
+- **Deployment trade-offs**  
+  Background workers are ideal (they continuously listen for BRPOP), but some managed platforms charge for always-on workers. Options include deploying true background workers on paid tiers, using platform scheduled wake mechanisms, or exposing a lightweight web endpoint that spins up the worker process (less ideal).
+
+## Practical considerations surfaced by the project
+
+- **GitHub App authentication**: Implementing JWT generation from the app private key and exchanging it for installation tokens is essential and requires careful PEM handling.  
+- **Commit-level comments**: Posting inline comments requires correct commit SHA, file path and line — edge cases must be guarded (deleted/renamed files, missing patches).  
+- **Multi-tenant Redis operations**: Scanning and blocking across many installation queues requires careful BRPOP usage and backoff strategies.  
+- **Security & privacy**: Namespacing is the baseline requirement to prevent cross-tenant access to review data.
+
+## Deployment & distribution
+
+- Services are containerized and suitable for deployment to managed platforms (Render, Fly.io, Railway, Docker-hosted VMs).  
+- The CLI is packaged for PyPI and can be published via GitHub Actions using OIDC or traditional token-based publishing.
+
+## Summary
+
+This project demonstrates a production-oriented approach to automating PR reviews: a modular design, clear tenant isolation, resilient LLM integration, and developer ergonomics via a CLI. It’s designed to be secure, testable, and deployable, and aims to augment — not replace — human reviewers by providing a fast, consistent first-pass on incoming pull requests.
 `.trim(),
 
-  videoUrl: "/videos/auto_pr_review_demo.mp4",
+  videoUrl: "/videos/Auto PR Review Assistant video demo.mp4",
   github: "https://github.com/Ahmedsulaimon/Auto-PR-Review-Assistant",
   personalGoal: "My personal goal for this project was to explore how AI can be embedded into developer workflows, while practicing distributed system design, API integration, and test-driven development. I also aimed to solidify my DevOps skills by using Docker for containerization and GitHub Actions for continuous integration.",
 },
@@ -66,7 +106,7 @@ This project strengthened my skills in distributed systems, API integrations, au
   
   For a live walk-through, see the embedded demo video.
   `.trim(),
-      
+      screenshots:['architecture.png'],
       github: 'https://github.com/Ahmedsulaimon/price-comparison-app/tree/main',
       videoUrl: '/videos/Price Prediction App.mp4', 
       personalGoal: "The main purpose of taking on this project is to learn new skills which include web scraping, intigrating machine learning algorithm in a real world application, understanding and practicing containarization & Microservices"
