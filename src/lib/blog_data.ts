@@ -144,6 +144,10 @@ I store **API_URL** and **installation_id** in **~/.pr-review/config.json** for 
 
 Small design choices can have big outcomes. Namespacing Redis keys by **installation_id** fixed security and scaling issues early. Operational realities (free-host spin-down) forced pragmatic trade-offs -- the wake endpoint is one such pattern that kept things usable at low cost. Finally, integrating APIs and LLMs taught me the value of strict output contracts, defensive parsing, and strong observability.
 
+---
+
+## Installation
+
 If you want to try the GitHub App, install it here:  
 https://github.com/apps/auto-pr-review-assistant/installations/new
 
