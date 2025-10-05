@@ -22,7 +22,7 @@ export interface Project {
   shortDescription:
     "A distributed system that automates GitHub pull request reviews using AI, posting inline comments on code changes and providing a CLI dashboard for developers.",
   thumbnailUrl: "/images/auto_pr_review.png",
-  date: "2025-09-10",
+  date: "2025-10-03",
   techStack: ['Python', 'FastAPI', 'Redis', 'Docker', 'GitHub API', 'OpenAI API', 'Pytest', 'GitHub Actions'],
   fullDescription: `
 The **Auto PR Review Assistant** is a microservice, multi-tenant system that automates code review for GitHub pull requests. It combines GitHub webhooks, namespaced Redis queues, and an AI review engine to produce inline, contextual feedback and persist review history **per GitHub App installation**.
