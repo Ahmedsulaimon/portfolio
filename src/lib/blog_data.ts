@@ -82,7 +82,7 @@ This is a cost-conscious trade-off -- it works well enough for demos and low usa
 
 GitHub App auth required care:
 
-- The App private key must be PEM-formatted. When stored in env vars I convert '\n' sequences back into real newlines before using PyJWT.  
+- The App private key must be PEM-formatted. When stored in env vars I convert backslash n (\n) sequences back into real newlines before using PyJWT.  
 - I generate a short-lived JWT (≤10m) for the App, then exchange it for an **installation access token** per installation.  
 - Installation tokens expire, so I refresh tokens and retry on 401 responses.
 
