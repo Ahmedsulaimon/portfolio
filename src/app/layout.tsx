@@ -8,6 +8,9 @@ import Footer from "./(components)/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  verification: {
+    google: "kWwJSsVuMEXzxuzVeK231DU-28aotAezZ8wn1hg6L0Y",
+  },
   title: "Ahmed Codes — Junior Software Engineer",
   description:
     "Portfolio of Ahmed Sulaimon — Junior Software Engineer specialising in full-stack and backend development. Based in London, UK.",
