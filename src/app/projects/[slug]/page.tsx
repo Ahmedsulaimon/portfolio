@@ -33,13 +33,13 @@ export default async function ProjectDetail({ params }: {
     <main className="max-w-4xl mx-auto px-6 sm:px-8 py-16">
       {/* Header */}
       <div className="mb-10">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">{project.title}</h1>
-        <p className="text-sm text-gray-500">{project.date}</p>
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">{project.title}</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">{project.date}</p>
         <div className="flex flex-wrap gap-2 mt-4">
           {project.techStack.map((tech) => (
             <span
               key={tech}
-              className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-3 py-1 rounded-full"
+              className="bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 text-xs font-medium mr-2 px-3 py-1 rounded-full"
             >
               {tech}
             </span>
@@ -49,7 +49,7 @@ export default async function ProjectDetail({ params }: {
 
       
       {/* Description */}
-      <article className="prose prose-lg prose-neutral max-w-none mb-14">
+      <article className="prose prose-lg prose-neutral dark:prose-invert max-w-none mb-14">
       <ReactMarkdown remarkPlugins={[remarkGfm]}>
          {project.fullDescription}
       </ReactMarkdown>
@@ -60,9 +60,9 @@ export default async function ProjectDetail({ params }: {
       {/* Demo Video */}
       {project.videoUrl && (
         <div className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">Project Demo</h2>
+          <h2 className="text-2xl font-semibold mb-4 dark:text-white">Project Demo</h2>
           <video
-            className="w-full rounded-lg border border-gray-200 shadow"
+            className="w-full rounded-lg border border-gray-200 dark:border-slate-700 shadow"
             controls
           >
             <source src={project.videoUrl} type="video/mp4" />
@@ -73,9 +73,9 @@ export default async function ProjectDetail({ params }: {
      
       {/* Personal Goal */}
       {project.personalGoal && (
-        <div className="mb-12 bg-gray-50 p-6 rounded-lg border">
-          <h2 className="text-xl font-semibold mb-2">Personal Goal</h2>
-          <p className="text-gray-700">{project.personalGoal}</p>
+        <div className="mb-12 bg-gray-50 dark:bg-slate-800 p-6 rounded-lg border border-gray-200 dark:border-slate-700">
+          <h2 className="text-xl font-semibold mb-2 dark:text-white">Personal Goal</h2>
+          <p className="text-gray-700 dark:text-gray-300">{project.personalGoal}</p>
         </div>
       )}
 
@@ -92,7 +92,7 @@ export default async function ProjectDetail({ params }: {
   {project.blogSlug && (
     <Link
       href={`/blog/${project.blogSlug}`}
-      className="text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 px-6 py-2 rounded-lg font-medium transition"
+      className="text-gray-900 dark:text-white bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 hover:bg-gray-100 dark:hover:bg-slate-600 px-6 py-2 rounded-lg font-medium transition"
     >
       Read Technical Blog →
     </Link>
